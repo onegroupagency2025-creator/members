@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import {
   Alert,
@@ -303,6 +303,14 @@ const CreateMemberScreen = () => {
   const isWeb = Platform.OS === "web";
   const { width: windowWidth } = useWindowDimensions();
   const isNarrowScreen = windowWidth < 480;
+  const scrollViewRef = useRef<ScrollView>(null);
+
+  useEffect(() => {
+    if (isConfirming) {
+      scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+    }
+  }, [isConfirming]);
+
   const insuranceOptions = useMemo(
     () => [
       { label: "未選択", value: "" },
@@ -616,6 +624,7 @@ const CreateMemberScreen = () => {
         className="flex-1"
       >
         <ScrollView
+          ref={scrollViewRef}
           className="flex-1"
           contentContainerStyle={{
             paddingHorizontal: isNarrowScreen ? 28 : 16,
