@@ -760,7 +760,7 @@ const CreateMemberScreen = () => {
               render={({ field }) => {
                 const [first, second, third] = splitPhoneNumber(field.value);
                 return (
-                  <View className="w-full flex-row items-center">
+                  <View className="w-full flex-row items-center gap-2">
                     <View style={{ flex: 3, minWidth: 0 }}>
                       <TextInput
                         value={first}
@@ -774,7 +774,7 @@ const CreateMemberScreen = () => {
                         className="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 text-center text-base text-slate-900"
                       />
                     </View>
-                    <Text className="px-1.5 text-slate-400">-</Text>
+                    <Text className="shrink-0 px-0.5 text-slate-400">-</Text>
                     <View style={{ flex: 4, minWidth: 0 }}>
                       <TextInput
                         value={second}
@@ -788,7 +788,7 @@ const CreateMemberScreen = () => {
                         className="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 text-center text-base text-slate-900"
                       />
                     </View>
-                    <Text className="px-1.5 text-slate-400">-</Text>
+                    <Text className="shrink-0 px-0.5 text-slate-400">-</Text>
                     <View style={{ flex: 4, minWidth: 0 }}>
                       <TextInput
                         value={third}
@@ -816,7 +816,7 @@ const CreateMemberScreen = () => {
                 render={({ field }) => {
                   const [first, second] = splitPostalCode(field.value);
                   return (
-                    <View className="w-full flex-row items-center">
+                    <View className="w-full flex-row items-center gap-2">
                       <View style={{ flex: 3, minWidth: 0 }}>
                         <TextInput
                           value={first}
@@ -830,7 +830,7 @@ const CreateMemberScreen = () => {
                           className="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 text-center text-base text-slate-900"
                         />
                       </View>
-                      <Text className="px-1.5 text-slate-400">-</Text>
+                      <Text className="shrink-0 px-0.5 text-slate-400">-</Text>
                       <View style={{ flex: 4, minWidth: 0 }}>
                         <TextInput
                           value={second}
@@ -847,7 +847,7 @@ const CreateMemberScreen = () => {
                       <Pressable
                         onPress={onPressPostalSearch}
                         disabled={postalSearchLoading}
-                        style={{ flex: 4, marginLeft: 8, minWidth: 64 }}
+                        style={{ width: 80, minWidth: 80, flexShrink: 0 }}
                         className={`h-12 items-center justify-center rounded-2xl px-4 ${
                           postalSearchLoading ? "bg-slate-300" : "bg-blue-600"
                         }`}
@@ -1073,12 +1073,15 @@ const CreateMemberScreen = () => {
                         value={field.value === undefined ? "" : String(field.value)}
                         onChangeText={(text) => field.onChange(toOptionalNumber(text))}
                         keyboardType="numeric"
-                        placeholder="例: 3500000"
+                        placeholder="例: 350"
                       />
                     )}
                   />
                 </View>
-                <Text className="ml-2 text-sm text-slate-600">万</Text>
+                <View style={{ flex: 4, justifyContent: "center" }}>
+                  <Text className="text-sm text-slate-600">万</Text>
+                </View>
+                <View style={{ flex: 4 }} />
               </View>
               <ErrorText message={formState.errors.annual_income?.message} />
             </View>
