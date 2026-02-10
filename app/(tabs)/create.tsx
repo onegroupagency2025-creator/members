@@ -301,7 +301,12 @@ const CreateMemberScreen = () => {
   const [birthDay, setBirthDay] = useState("");
   const isWeb = Platform.OS === "web";
   const insuranceOptions = useMemo(
-    () => enumOptions(insuranceTypeEnum.options),
+    () => [
+      { label: "未選択", value: "" },
+      { label: "国民健康保険", value: "国保" },
+      { label: "社会保険", value: "社保" },
+      { label: "なし", value: "なし" },
+    ],
     [],
   );
   const employmentOptions = useMemo(
@@ -553,7 +558,12 @@ const CreateMemberScreen = () => {
     { label: "郵便番号", value: confirmValues.postal_code ?? "" },
     { label: "住所A", value: confirmValues.address_1 ?? "" },
     { label: "住所B", value: confirmValues.address_2 ?? "" },
-    { label: "保険証", value: confirmValues.insurance_type ?? "" },
+    {
+      label: "保険証",
+      value:
+        insuranceOptions.find((o) => o.value === confirmValues.insurance_type)
+          ?.label ?? confirmValues.insurance_type ?? "",
+    },
     { label: "雇用形態", value: confirmValues.employment_status ?? "" },
     { label: "暮らし", value: confirmValues.living_status ?? "" },
     { label: "通院歴", value: formatBoolean(confirmValues.hospital_visit_history) },
@@ -567,7 +577,7 @@ const CreateMemberScreen = () => {
     { label: "生活保護", value: formatBoolean(confirmValues.is_on_welfare) },
     { label: "過去の福祉利用", value: formatBoolean(confirmValues.past_welfare_usage) },
     { label: "経緯", value: confirmValues.background ?? "" },
-    { label: "関わり", value: confirmValues.involvement ?? "" },
+    { label: "関係性", value: confirmValues.involvement ?? "" },
   ];
 
   return (
@@ -687,12 +697,13 @@ const CreateMemberScreen = () => {
               <FieldLabel label="生年月日" />
               <View className="flex-row items-center gap-2">
                 <View className="flex-1 flex-row items-center">
-                  <View className="h-12 flex-1 justify-center rounded-2xl border border-slate-200 bg-slate-50 px-1">
+                  <View className="h-12 flex-1 justify-center rounded-2xl border border-slate-200 bg-slate-50 px-1" style={{ borderColor: "rgba(203, 213, 225, 1)" }}>
                     <Picker
                       selectedValue={birthYear}
                       onValueChange={(value) =>
                         updateBirthDate(String(value), birthMonth, birthDay)
                       }
+                      style={{ backgroundColor: "transparent", height: 48 }}
                     >
                       <Picker.Item label="年" value="" />
                       {birthYearOptions.map((year) => (
@@ -703,12 +714,13 @@ const CreateMemberScreen = () => {
                   <Text className="ml-2 text-sm text-slate-600">年</Text>
                 </View>
                 <View className="flex-1 flex-row items-center">
-                  <View className="h-12 flex-1 justify-center rounded-2xl border border-slate-200 bg-slate-50 px-1">
+                  <View className="h-12 flex-1 justify-center rounded-2xl border border-slate-200 bg-slate-50 px-1" style={{ borderColor: "rgba(203, 213, 225, 1)" }}>
                     <Picker
                       selectedValue={birthMonth}
                       onValueChange={(value) =>
                         updateBirthDate(birthYear, String(value), birthDay)
                       }
+                      style={{ backgroundColor: "transparent", height: 48 }}
                     >
                       <Picker.Item label="月" value="" />
                       {birthMonthOptions.map((month) => (
@@ -719,12 +731,13 @@ const CreateMemberScreen = () => {
                   <Text className="ml-2 text-sm text-slate-600">月</Text>
                 </View>
                 <View className="flex-1 flex-row items-center">
-                  <View className="h-12 flex-1 justify-center rounded-2xl border border-slate-200 bg-slate-50 px-1">
+                  <View className="h-12 flex-1 justify-center rounded-2xl border border-slate-200 bg-slate-50 px-1" style={{ borderColor: "rgba(203, 213, 225, 1)" }}>
                     <Picker
                       selectedValue={birthDay}
                       onValueChange={(value) =>
                         updateBirthDate(birthYear, birthMonth, String(value))
                       }
+                      style={{ backgroundColor: "transparent", height: 48 }}
                     >
                       <Picker.Item label="日" value="" />
                       {birthDayOptions.map((day) => (
@@ -804,39 +817,37 @@ const CreateMemberScreen = () => {
                   const [first, second] = splitPostalCode(field.value);
                   return (
                     <View className="w-full flex-row items-center">
-                      <View className="flex-row items-center" style={{ flex: 1, minWidth: 0 }}>
-                        <View style={{ flex: 3, minWidth: 0 }}>
-                          <TextInput
-                            value={first}
-                            onChangeText={(text) =>
-                              field.onChange(mergePostalCode(text, second))
-                            }
-                            keyboardType="number-pad"
-                            maxLength={3}
-                            placeholder="150"
-                            placeholderTextColor="#94a3b8"
-                            className="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 text-center text-base text-slate-900"
-                          />
-                        </View>
-                        <Text className="px-1.5 text-slate-400">-</Text>
-                        <View style={{ flex: 4, minWidth: 0 }}>
-                          <TextInput
-                            value={second}
-                            onChangeText={(text) =>
-                              field.onChange(mergePostalCode(first, text))
-                            }
-                            keyboardType="number-pad"
-                            maxLength={4}
-                            placeholder="0001"
-                            placeholderTextColor="#94a3b8"
-                            className="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 text-center text-base text-slate-900"
-                          />
-                        </View>
+                      <View style={{ flex: 3, minWidth: 0 }}>
+                        <TextInput
+                          value={first}
+                          onChangeText={(text) =>
+                            field.onChange(mergePostalCode(text, second))
+                          }
+                          keyboardType="number-pad"
+                          maxLength={3}
+                          placeholder="150"
+                          placeholderTextColor="#94a3b8"
+                          className="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 text-center text-base text-slate-900"
+                        />
+                      </View>
+                      <Text className="px-1.5 text-slate-400">-</Text>
+                      <View style={{ flex: 4, minWidth: 0 }}>
+                        <TextInput
+                          value={second}
+                          onChangeText={(text) =>
+                            field.onChange(mergePostalCode(first, text))
+                          }
+                          keyboardType="number-pad"
+                          maxLength={4}
+                          placeholder="0001"
+                          placeholderTextColor="#94a3b8"
+                          className="h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 text-center text-base text-slate-900"
+                        />
                       </View>
                       <Pressable
                         onPress={onPressPostalSearch}
                         disabled={postalSearchLoading}
-                        style={{ marginLeft: 8, minWidth: 64 }}
+                        style={{ flex: 4, marginLeft: 8, minWidth: 64 }}
                         className={`h-12 items-center justify-center rounded-2xl px-4 ${
                           postalSearchLoading ? "bg-slate-300" : "bg-blue-600"
                         }`}
@@ -884,6 +895,9 @@ const CreateMemberScreen = () => {
                   />
                 )}
               />
+              <Text className="mt-1 text-xs text-slate-500">
+                ＊住民票の住所を入力してください
+              </Text>
               <ErrorText message={formState.errors.address_2?.message} />
             </View>
             </SectionCard>
@@ -1049,18 +1063,23 @@ const CreateMemberScreen = () => {
 
             <View className="mt-4">
               <FieldLabel label="昨年度年収" />
-              <Controller
-                control={control}
-                name="annual_income"
-                render={({ field }) => (
-                  <FormInput
-                    value={field.value === undefined ? "" : String(field.value)}
-                    onChangeText={(text) => field.onChange(toOptionalNumber(text))}
-                    keyboardType="numeric"
-                    placeholder="例: 3500000"
+              <View className="w-full flex-row items-center">
+                <View style={{ flex: 3, minWidth: 0 }}>
+                  <Controller
+                    control={control}
+                    name="annual_income"
+                    render={({ field }) => (
+                      <FormInput
+                        value={field.value === undefined ? "" : String(field.value)}
+                        onChangeText={(text) => field.onChange(toOptionalNumber(text))}
+                        keyboardType="numeric"
+                        placeholder="例: 3500000"
+                      />
+                    )}
                   />
-                )}
-              />
+                </View>
+                <Text className="ml-2 text-sm text-slate-600">万</Text>
+              </View>
               <ErrorText message={formState.errors.annual_income?.message} />
             </View>
 
@@ -1095,7 +1114,7 @@ const CreateMemberScreen = () => {
             </View>
             </SectionCard>
 
-            <SectionCard title="経緯・関わり">
+            <SectionCard title="経緯・関係性">
             <FieldLabel label="経緯" />
             <Controller
               control={control}
@@ -1112,7 +1131,7 @@ const CreateMemberScreen = () => {
             <ErrorText message={formState.errors.background?.message} />
 
             <View className="mt-4">
-              <FieldLabel label="関わり" />
+              <FieldLabel label="関係性" />
               <Controller
                 control={control}
                 name="involvement"
@@ -1120,7 +1139,7 @@ const CreateMemberScreen = () => {
                   <FormInput
                     value={field.value ?? ""}
                     onChangeText={field.onChange}
-                    placeholder="関わりを入力"
+                    placeholder="関係性を入力"
                     multiline
                   />
                 )}

@@ -22,7 +22,7 @@
 | 電話番号 | phone_number | string | |
 | 郵便番号 | postal_code | string | |
 | 住所A / B | address_1 / address_2 | string | |
-| 保険証 | insurance_type | enum | 国保, 社保, なし |
+| 保険証 | insurance_type | enum | 国保, 社保, なし（表示は国民健康保険, 社会保険, なし） |
 | 雇用形態 | employment_status | enum | 正社員, 個人事業主, フリーター, 生活保護等 |
 | 暮らし | living_status | enum | 単身, シェアハウス, 実家, 同棲など |
 | 障害者手帳 | disability_handbook | enum | 精神, なし |
@@ -34,7 +34,7 @@
 | 昨年度年収 | annual_income | number | |
 | 生活保護 | is_on_welfare | boolean | |
 | 過去の福祉利用 | past_welfare_usage | boolean | |
-| 経緯 / 関わり | background / involvement | text | |
+| 経緯 / 関係性 | background / involvement | text | |
 | 生データ | raw_data | string (json) | RapidAPIからのレスポンスをそのまま保持 |
 
 # Implementation Requirements
