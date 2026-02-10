@@ -618,7 +618,8 @@ const CreateMemberScreen = () => {
         <ScrollView
           className="flex-1"
           contentContainerStyle={{
-            padding: isNarrowScreen ? 20 : 16,
+            paddingHorizontal: isNarrowScreen ? 28 : 16,
+            paddingTop: isNarrowScreen ? 20 : 16,
             paddingBottom: isNarrowScreen ? 40 : 32,
             alignItems: isWeb && !isNarrowScreen ? "center" : "stretch",
           }}
@@ -642,9 +643,6 @@ const CreateMemberScreen = () => {
             ) : (
             <View className="mb-5 rounded-3xl border border-blue-100 bg-blue-50 p-5">
               <Text className="text-xl font-bold text-slate-900">利用者情報の入力</Text>
-              <Text className="mt-2 text-sm leading-5 text-slate-600">
-                必須項目は赤色の「必須」チップで表示します。分かる範囲から入力して保存できます。
-              </Text>
             </View>
             )}
 
