@@ -621,18 +621,12 @@ const CreateMemberScreen = () => {
             paddingHorizontal: isNarrowScreen ? 28 : 16,
             paddingTop: isNarrowScreen ? 20 : 16,
             paddingBottom: isNarrowScreen ? 40 : 32,
-            alignItems: isWeb && !isNarrowScreen ? "center" : "stretch",
+            alignItems: isWeb ? "center" : "stretch",
           }}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={!isNarrowScreen}
         >
-          <View
-            style={
-              isWeb && !isNarrowScreen
-                ? { width: 420 }
-                : { width: "100%", maxWidth: 860 }
-            }
-          >
+          <View style={isWeb ? { width: 420 } : { width: "100%", maxWidth: 860 }}>
             {isConfirming ? (
               <View className="mb-5 rounded-3xl border border-blue-100 bg-blue-50 p-5">
                 <Text className="text-xl font-bold text-slate-900">入力内容の確認</Text>
