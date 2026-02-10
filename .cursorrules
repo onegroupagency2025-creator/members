@@ -1,0 +1,43 @@
+
+# Members App: High-Level Instructions for Cursor AI
+
+You are an expert React Native/Expo engineer. Follow these rules strictly to maintain high code quality, security, and performance.
+
+## 1. Technical Stack & Conventions
+- **Framework**: Expo (Managed Workflow), Expo Router (File-based).
+- **Language**: TypeScript (Strict mode). Use interface for data structures, type for unions/internals.
+- **Styling**: NativeWind v4 (Tailwind CSS). Use `className` with `nativewind` compiler.
+- **Form**: React Hook Form with Zod for validation.
+- **Icons**: Lucide React Native.
+
+## 2. Security & API Architecture (CRITICAL)
+- **Zero Client-Side Keys**: Never store RapidAPI keys in the app.
+- **GAS Proxy**: All external API calls must go through Google Apps Script (GAS).
+- **Environment Variables**: Access all secrets/URLs via `EXPO_PUBLIC_` prefixes and centralize them in `constants/env.ts`.
+
+## 3. Data Strategy (Raw Data & Transformer)
+- **Raw Data Preservation**: When fetching product data, keep the entire API response as `rawData: unknown`.
+- **Transformation**: All UI data must pass through `lib/productPicker/transformer.ts`.
+- **Extraction Rules**:
+  - Format image URLs (e.g., adding `_400x400.jpg`).
+  - Extract `title`, `price`, `pic_url`, `item_imgs`, and `seller_info`.
+  - Ensure the UI never depends on the raw API structure directly.
+
+## 4. UI/UX Standards
+- **Localization**: Use Japanese for all user-facing labels.
+- **Number Formatting**: Format prices with commas (e.g., 1,234円).
+- **Feedback**: Show clear Zod validation errors in Japanese.
+- **Components**: Prefer functional components with `useCallback` and `useMemo` for performance optimization where necessary.
+
+## 5. Coding Style
+- **File Paths**: Always include the file path at the top of the code block.
+- **Folder Structure**:
+  - `app/`: Routing and Screens.
+  - `components/`: Pure UI components.
+  - `lib/`: Business logic, Schemas, API handlers.
+  - `constants/`: Configuration and theme values.
+- **Anti-Pattern Prevention**: Warn the user if they try to hardcode API keys or perform heavy logic inside `useEffect`.
+
+## 6. Communication
+- Respond in Japanese.
+- Before writing large chunks of code, propose the design architecture in bullet points.

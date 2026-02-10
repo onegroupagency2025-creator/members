@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "Members",
+    "slug": "members",
+    "version": "1.0.0",
+    "scheme": "members",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.members.app"
+    },
+    "android": {
+      "package": "com.members.app"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
