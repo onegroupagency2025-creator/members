@@ -26,7 +26,7 @@ export default function CompleteScreen() {
     <SafeAreaView className="flex-1 bg-slate-50">
       <View
         className="flex-1 items-center justify-center"
-        style={{ paddingHorizontal: isNarrow ? 28 : 24 }}
+        style={{ paddingHorizontal: isNarrow ? 32 : 24 }}
       >
         <View
           className="w-full max-w-[420px] rounded-3xl border border-emerald-100 bg-white p-6 shadow-sm"

@@ -627,7 +627,7 @@ const CreateMemberScreen = () => {
           ref={scrollViewRef}
           className="flex-1"
           contentContainerStyle={{
-            paddingHorizontal: isNarrowScreen ? 28 : 16,
+            paddingHorizontal: isNarrowScreen ? 32 : 16,
             paddingTop: isNarrowScreen ? 20 : 16,
             paddingBottom: isNarrowScreen ? 40 : 32,
             alignItems: isWeb ? "center" : "stretch",
