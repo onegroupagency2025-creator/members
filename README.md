@@ -56,4 +56,7 @@ npx netlify deploy --prod --dir=dist
 ### 環境変数
 
 本番でも **EXPO_PUBLIC_GAS_ENDPOINT**（Google Apps Script の Web アプリ URL）を設定してください。ビルド時に埋め込まれるため、Vercel / Netlify のダッシュボードで環境変数を追加したうえでビルドし直します。
-# members
+
+### GAS（スプレッドシート）側
+
+住所検索とフォーム送信先の GAS サンプルは **`gas/`** フォルダにあります。`gas/README.md` の手順でスプレッドシートにスクリプトを追加し、ウェブアプリとしてデプロイした URL を `EXPO_PUBLIC_GAS_ENDPOINT` に設定してください。
