@@ -449,41 +449,67 @@ const CreateMemberScreen = () => {
       Alert.alert("入力エラー", "郵便番号は7桁で入力してください。");
       return;
     }
-    if (!GAS_ENDPOINT) {
-      Alert.alert("設定エラー", "GASエンドポイントが未設定です。");
-      return;
-    }
 
     setPostalSearchLoading(true);
     try {
-      const response = await fetch(
-        `${GAS_ENDPOINT}?action=searchPostalCode&postal_code=${digits}`,
+      // 1) GAS で検索を試行
+      if (GAS_ENDPOINT) {
+        try {
+          const response = await fetch(
+            `${GAS_ENDPOINT}?action=searchPostalCode&postal_code=${digits}`,
+          );
+          if (response.ok) {
+            const contentType = response.headers.get("content-type");
+            if (contentType?.includes("application/json")) {
+              const result = (await response.json()) as {
+                ok?: boolean;
+                address_1?: string;
+                address_2?: string;
+                address1?: string;
+                address2?: string;
+                address?: string;
+                error?: string;
+              };
+              if (result.ok) {
+                const address1 =
+                  result.address_1 ?? result.address1 ?? result.address ?? "";
+                const address2 =
+                  result.address_2 ?? result.address2 ?? "";
+                if (address1) {
+                  setValue("address_1", address1, { shouldValidate: true });
+                  setValue("address_2", address2, { shouldValidate: true });
+                  Alert.alert("住所検索", "住所を入力しました。");
+                  return;
+                }
+              }
+            }
+          }
+        } catch {
+          // GAS 失敗時はフォールバックへ
+        }
+      }
+
+      // 2) フォールバック: zipcloud（無料API）で検索
+      const fallbackResponse = await fetch(
+        `https://zipcloud.ibsnet.co.jp/api/search?zipcode=${digits}`,
       );
-      if (!response.ok) {
-        throw new Error("住所検索に失敗しました。");
+      if (!fallbackResponse.ok) {
+        throw new Error("住所検索に失敗しました。しばらく経ってからお試しください。");
       }
-
-      const result = (await response.json()) as {
-        ok?: boolean;
-        address_1?: string;
-        address_2?: string;
-        address1?: string;
-        address2?: string;
-        address?: string;
-        error?: string;
+      const fallbackData = (await fallbackResponse.json()) as {
+        status?: number;
+        results?: Array<{
+          address1?: string;
+          address2?: string;
+          address3?: string;
+        }> | null;
       };
-
-      if (!result.ok) {
-        throw new Error(result.error || "該当する住所が見つかりません。");
-      }
-
-      const address1 = result.address_1 ?? result.address1 ?? result.address ?? "";
-      const address2 = result.address_2 ?? result.address2 ?? "";
-
-      if (!address1) {
+      const first = fallbackData.results?.[0];
+      if (!first?.address1) {
         throw new Error("該当する住所が見つかりません。");
       }
-
+      const address1 = `${first.address1}${first.address2 ?? ""}`;
+      const address2 = first.address3 ?? "";
       setValue("address_1", address1, { shouldValidate: true });
       setValue("address_2", address2, { shouldValidate: true });
       Alert.alert("住所検索", "住所を入力しました。");
@@ -845,6 +871,8 @@ const CreateMemberScreen = () => {
                         />
                       </View>
                       <Pressable
+                        accessibilityRole="button"
+                        accessibilityLabel="郵便番号で住所を検索"
                         onPress={onPressPostalSearch}
                         disabled={postalSearchLoading}
                         style={{ width: 80, minWidth: 80, flexShrink: 0 }}
@@ -1078,7 +1106,7 @@ const CreateMemberScreen = () => {
                     )}
                   />
                 </View>
-                <View style={{ flex: 4, justifyContent: "center" }}>
+                <View style={{ flex: 4, justifyContent: "center" }} className="pl-3">
                   <Text className="text-sm text-slate-600">万</Text>
                 </View>
                 <View style={{ flex: 4 }} />
