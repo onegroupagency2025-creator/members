@@ -13,6 +13,7 @@ import {
   Text,
   TextInput,
   View,
+  useWindowDimensions,
 } from "react-native";
 import { Controller, type SubmitHandler, useForm } from "react-hook-form";
 
@@ -300,6 +301,8 @@ const CreateMemberScreen = () => {
   const [birthMonth, setBirthMonth] = useState("");
   const [birthDay, setBirthDay] = useState("");
   const isWeb = Platform.OS === "web";
+  const { width: windowWidth } = useWindowDimensions();
+  const isNarrowScreen = windowWidth < 480;
   const insuranceOptions = useMemo(
     () => [
       { label: "未選択", value: "" },
@@ -615,13 +618,20 @@ const CreateMemberScreen = () => {
         <ScrollView
           className="flex-1"
           contentContainerStyle={{
-            padding: 16,
-            paddingBottom: 32,
-            alignItems: isWeb ? "center" : "stretch",
+            padding: isNarrowScreen ? 20 : 16,
+            paddingBottom: isNarrowScreen ? 40 : 32,
+            alignItems: isWeb && !isNarrowScreen ? "center" : "stretch",
           }}
           keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={!isNarrowScreen}
         >
-          <View style={isWeb ? { width: 420 } : { width: "100%", maxWidth: 860 }}>
+          <View
+            style={
+              isWeb && !isNarrowScreen
+                ? { width: 420 }
+                : { width: "100%", maxWidth: 860 }
+            }
+          >
             {isConfirming ? (
               <View className="mb-5 rounded-3xl border border-blue-100 bg-blue-50 p-5">
                 <Text className="text-xl font-bold text-slate-900">入力内容の確認</Text>

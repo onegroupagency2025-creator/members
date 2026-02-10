@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* スマホ: ノッチ・ホームインジケータ用のセーフエリア */
+@supports (padding: env(safe-area-inset-bottom)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* タップ時のハイライトを控えめに（スマホ） */
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.05);
+}
